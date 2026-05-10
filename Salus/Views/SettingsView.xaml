@@ -1,0 +1,127 @@
+<UserControl x:Class="Salus.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource BackgroundBrush}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24">
+            <TextBlock Text="Settings" FontSize="22" FontWeight="Bold"
+                       Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,24"/>
+
+            <!-- Profiles Section -->
+            <TextBlock Text="Profiles" FontSize="16" FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+            <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="12" Margin="0,0,0,24">
+                <StackPanel>
+                    <ItemsControl ItemsSource="{Binding Profiles}" Margin="0,0,0,8">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="4,6">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Name}"
+                                                   Foreground="{DynamicResource TextPrimaryBrush}"
+                                                   VerticalAlignment="Center"/>
+                                        <Button Grid.Column="1" Content="Select" Margin="4,0"
+                                                Style="{StaticResource SecondaryButton}"
+                                                Command="{Binding DataContext.SelectProfileCommand,
+                                                    RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}"/>
+                                        <Button Grid.Column="2" Content="Delete"
+                                                Style="{StaticResource DangerButton}"
+                                                Command="{Binding DataContext.DeleteProfileCommand,
+                                                    RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Style="{StaticResource StandardTextBox}"
+                                 Text="{Binding NewProfileName, UpdateSourceTrigger=PropertyChanged}"
+                                 Tag="New profile name" Width="200" Margin="0,0,8,0"/>
+                        <Button Content="Create" Style="{StaticResource PrimaryButton}"
+                                Command="{Binding CreateProfileCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Exercise List Section -->
+            <TextBlock Text="Exercise List" FontSize="16" FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+            <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="12" Margin="0,0,0,24">
+                <StackPanel>
+                    <ItemsControl ItemsSource="{Binding Exercises}" Margin="0,0,0,8">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="4,6">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Name}"
+                                                   Foreground="{DynamicResource TextPrimaryBrush}"
+                                                   VerticalAlignment="Center"/>
+                                        <Button Grid.Column="1" Content="Delete"
+                                                Style="{StaticResource DangerButton}"
+                                                Command="{Binding DataContext.DeleteExerciseCommand,
+                                                    RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Style="{StaticResource StandardTextBox}"
+                                 Text="{Binding NewExerciseName, UpdateSourceTrigger=PropertyChanged}"
+                                 Tag="New exercise name" Width="200" Margin="0,0,8,0"/>
+                        <Button Content="Add" Style="{StaticResource PrimaryButton}"
+                                Command="{Binding AddExerciseCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Appearance Section -->
+            <TextBlock Text="Appearance" FontSize="16" FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+            <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="12" Margin="0,0,0,24">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Theme:" VerticalAlignment="Center" Margin="0,0,8,0"
+                               Foreground="{DynamicResource TextPrimaryBrush}"/>
+                    <ComboBox SelectedItem="{Binding SelectedTheme}" Width="120" Margin="0,0,8,0">
+                        <ComboBoxItem Content="Light"/>
+                        <ComboBoxItem Content="Dark"/>
+                        <ComboBoxItem Content="System"/>
+                    </ComboBox>
+                    <Button Content="Apply" Style="{StaticResource PrimaryButton}"
+                            Command="{Binding ApplyThemeCommand}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Startup Section -->
+            <TextBlock Text="Startup" FontSize="16" FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+            <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="12">
+                <StackPanel>
+                    <CheckBox Content="Launch Salus when Windows starts"
+                              IsChecked="{Binding LaunchOnStartup}"
+                              Foreground="{DynamicResource TextPrimaryBrush}"
+                              Command="{Binding ToggleStartupCommand}" Margin="0,0,0,8"/>
+                    <TextBlock Text="Daily prompt appears after 5:00 AM if no entry has been logged."
+                               FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,91 @@
+<Window x:Class="Salus.Views.ProfileSelectorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:Salus.ViewModels"
+        Title="Salus — Select Profile"
+        Width="420" Height="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="{DynamicResource BackgroundBrush}">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="Salus" FontSize="28" FontWeight="Bold"
+                       Foreground="{DynamicResource PrimaryBrush}"/>
+            <TextBlock Text="Choose a profile to continue"
+                       FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+        </StackPanel>
+
+        <!-- Profile List -->
+        <Border Grid.Row="1" Background="{DynamicResource SurfaceBrush}"
+                CornerRadius="8" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+            <ScrollViewer>
+                <ItemsControl ItemsSource="{Binding Profiles}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1"
+                                    Padding="12,10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}" FontSize="15" FontWeight="SemiBold"
+                                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                        <TextBlock FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}">
+                                            <Run Text="Last used: "/>
+                                            <Run Text="{Binding LastUsedAt, StringFormat='{}{0:MMM d, yyyy}'}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+
+                                    <Button Grid.Column="1" Content="Select" Margin="4,0"
+                                            Style="{StaticResource PrimaryButton}"
+                                            Command="{Binding DataContext.SelectProfileCommand,
+                                                RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}"/>
+
+                                    <Button Grid.Column="2" Content="Delete"
+                                            Style="{StaticResource DangerButton}"
+                                            Command="{Binding DataContext.DeleteProfileCommand,
+                                                RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Bottom: Create Profile -->
+        <StackPanel Grid.Row="2" Margin="0,12,0,0">
+            <StackPanel Visibility="{Binding IsCreating, Converter={StaticResource BoolToVis}}">
+                <TextBox Style="{StaticResource StandardTextBox}"
+                         Text="{Binding NewProfileName, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,0,0,8" Tag="Profile name"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Cancel" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0"
+                            Command="{Binding CancelCreateCommand}"/>
+                    <Button Content="Create" Style="{StaticResource PrimaryButton}"
+                            Command="{Binding CreateProfileCommand}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <Button Content="+ New Profile"
+                    Style="{StaticResource SecondaryButton}"
+                    HorizontalAlignment="Stretch"
+                    Visibility="{Binding IsCreating, Converter={StaticResource InverseBoolToVis}}"
+                    Command="{Binding ShowCreateFormCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,1 +1,16 @@
 Salus - Implementation Plan.md
+
+# Build output
+**/bin/
+**/obj/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.rsuser
+
+# SQLite database files (runtime data)
+*.db
+*.db-shm
+*.db-wal

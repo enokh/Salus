@@ -1,0 +1,49 @@
+<UserControl x:Class="Salus.Views.TrendsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             Background="{DynamicResource BackgroundBrush}">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="Trends" FontSize="22" FontWeight="Bold"
+                   Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+        <!-- Date Range -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,12">
+            <TextBlock Text="From:" VerticalAlignment="Center" Margin="0,0,8,0"
+                       Foreground="{DynamicResource TextSecondaryBrush}"/>
+            <DatePicker SelectedDate="{Binding StartDate}" Margin="0,0,16,0" Width="130"/>
+            <TextBlock Text="To:" VerticalAlignment="Center" Margin="0,0,8,0"
+                       Foreground="{DynamicResource TextSecondaryBrush}"/>
+            <DatePicker SelectedDate="{Binding EndDate}" Margin="0,0,16,0" Width="130"/>
+            <Button Content="Load" Style="{StaticResource PrimaryButton}"
+                    Command="{Binding LoadDataCommand}"/>
+        </StackPanel>
+
+        <!-- Series Toggles -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,12">
+            <CheckBox Content="Sleep" IsChecked="{Binding ShowSleep}" Margin="0,0,16,0"
+                      Foreground="{DynamicResource TextPrimaryBrush}"/>
+            <CheckBox Content="Exercise" IsChecked="{Binding ShowExercise}" Margin="0,0,16,0"
+                      Foreground="{DynamicResource TextPrimaryBrush}"/>
+            <CheckBox Content="Weight" IsChecked="{Binding ShowWeight}" Margin="0,0,16,0"
+                      Foreground="{DynamicResource TextPrimaryBrush}"/>
+            <CheckBox Content="Mood" IsChecked="{Binding ShowMood}"
+                      Foreground="{DynamicResource TextPrimaryBrush}"/>
+        </StackPanel>
+
+        <!-- Chart -->
+        <lvc:CartesianChart Grid.Row="3"
+                            Series="{Binding Series}"
+                            XAxes="{Binding XAxes}"
+                            TooltipPosition="Top"/>
+    </Grid>
+</UserControl>

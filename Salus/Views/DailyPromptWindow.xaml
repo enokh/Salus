@@ -1,0 +1,145 @@
+<Window x:Class="Salus.Views.DailyPromptWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        Title="Salus — Daily Check-In"
+        Width="480" Height="680"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="{DynamicResource BackgroundBrush}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                <TextBlock Text="Daily Check-In" FontSize="24" FontWeight="Bold"
+                           Foreground="{DynamicResource TextPrimaryBrush}"/>
+                <TextBlock FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}">
+                    <Run Text="{Binding Source={x:Static system:DateTime.Today}, StringFormat='{}{0:dddd, MMMM d}'}"/>
+                </TextBlock>
+            </StackPanel>
+
+            <!-- Sleep -->
+            <StackPanel Grid.Row="1" Margin="0,0,0,16">
+                <DockPanel Margin="0,0,0,4">
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Sleep Hours" DockPanel.Dock="Left"/>
+                    <TextBlock Style="{StaticResource PreviousValueLabel}" HorizontalAlignment="Right"
+                               DockPanel.Dock="Right">
+                        <Run Text="Prev: "/>
+                        <Run Text="{Binding PreviousEntry.SleepHours, StringFormat='{}{0:F1} hrs', TargetNullValue='—'}"/>
+                    </TextBlock>
+                </DockPanel>
+                <TextBox Style="{StaticResource StandardTextBox}"
+                         Text="{Binding SleepHours, UpdateSourceTrigger=PropertyChanged}"
+                         Tag="e.g. 7.5"/>
+            </StackPanel>
+
+            <!-- Exercise -->
+            <StackPanel Grid.Row="2" Margin="0,0,0,16">
+                <DockPanel Margin="0,0,0,4">
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Exercise Duration (minutes)" DockPanel.Dock="Left"/>
+                    <TextBlock Style="{StaticResource PreviousValueLabel}" HorizontalAlignment="Right"
+                               DockPanel.Dock="Right">
+                        <Run Text="Prev: "/>
+                        <Run Text="{Binding PreviousEntry.ExerciseDuration, StringFormat='{}{0} min', TargetNullValue='—'}"/>
+                    </TextBlock>
+                </DockPanel>
+                <TextBox Style="{StaticResource StandardTextBox}"
+                         Text="{Binding ExerciseDuration, UpdateSourceTrigger=PropertyChanged}"
+                         Tag="e.g. 30"/>
+            </StackPanel>
+
+            <!-- Exercises Multi-Select -->
+            <StackPanel Grid.Row="3" Margin="0,0,0,16">
+                <TextBlock Style="{StaticResource FieldLabel}" Text="Exercises Performed"/>
+                <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="6"
+                        BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="8">
+                    <ItemsControl ItemsSource="{Binding Exercises}" MaxHeight="120">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Content="{Binding Exercise.Name}"
+                                          IsChecked="{Binding IsSelected}"
+                                          Foreground="{DynamicResource TextPrimaryBrush}"
+                                          Margin="0,3"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+            </StackPanel>
+
+            <!-- Weight -->
+            <StackPanel Grid.Row="4" Margin="0,0,0,16">
+                <DockPanel Margin="0,0,0,4">
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Weight (kg)" DockPanel.Dock="Left"/>
+                    <TextBlock Style="{StaticResource PreviousValueLabel}" HorizontalAlignment="Right"
+                               DockPanel.Dock="Right">
+                        <Run Text="Prev: "/>
+                        <Run Text="{Binding PreviousEntry.WeightKg, StringFormat='{}{0:F1} kg', TargetNullValue='—'}"/>
+                    </TextBlock>
+                </DockPanel>
+                <TextBox Style="{StaticResource StandardTextBox}"
+                         Text="{Binding WeightKg, UpdateSourceTrigger=PropertyChanged}"
+                         Tag="e.g. 72.5"/>
+            </StackPanel>
+
+            <!-- Mood -->
+            <StackPanel Grid.Row="5" Margin="0,0,0,16">
+                <DockPanel Margin="0,0,0,4">
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Mood" DockPanel.Dock="Left"/>
+                    <TextBlock Style="{StaticResource PreviousValueLabel}" HorizontalAlignment="Right"
+                               DockPanel.Dock="Right">
+                        <Run Text="Prev: "/>
+                        <Run Text="{Binding PreviousEntry.MoodRating, TargetNullValue='—'}"/>
+                    </TextBlock>
+                </DockPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="Mood1" Tag="1" Content="😞" Style="{StaticResource MoodButton}" Click="MoodButton_Click"/>
+                    <Button x:Name="Mood2" Tag="2" Content="😕" Style="{StaticResource MoodButton}" Click="MoodButton_Click"/>
+                    <Button x:Name="Mood3" Tag="3" Content="😐" Style="{StaticResource MoodButton}" Click="MoodButton_Click"/>
+                    <Button x:Name="Mood4" Tag="4" Content="😊" Style="{StaticResource MoodButton}" Click="MoodButton_Click"/>
+                    <Button x:Name="Mood5" Tag="5" Content="😄" Style="{StaticResource MoodButton}" Click="MoodButton_Click"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Photo -->
+            <StackPanel Grid.Row="6" Margin="0,0,0,20">
+                <TextBlock Style="{StaticResource FieldLabel}" Text="Photo"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Take Photo" Style="{StaticResource PrimaryButton}"
+                            Command="{Binding TakePhotoCommand}"
+                            Visibility="{Binding CameraAvailable, Converter={StaticResource BoolToVis}}"
+                            Margin="0,0,8,0"/>
+                    <Button Content="Skip Photo" Style="{StaticResource SecondaryButton}"
+                            Visibility="{Binding CameraAvailable, Converter={StaticResource BoolToVis}}"
+                            Click="SkipPhoto_Click"/>
+                    <TextBlock Text="No camera found — placeholder will be used"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               FontSize="13" VerticalAlignment="Center"
+                               Visibility="{Binding CameraAvailable, Converter={StaticResource InverseBoolToVis}}"/>
+                </StackPanel>
+                <Image x:Name="PhotoPreview" Height="80" Margin="0,8,0,0"
+                       HorizontalAlignment="Left" Stretch="Uniform"
+                       Visibility="{Binding HasPhoto, Converter={StaticResource BoolToVis}}"/>
+            </StackPanel>
+
+            <!-- Actions -->
+            <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Skip Today" Style="{StaticResource SecondaryButton}"
+                        Command="{Binding DismissCommand}" Margin="0,0,8,0"/>
+                <Button Content="Submit" Style="{StaticResource PrimaryButton}"
+                        Command="{Binding SubmitCommand}"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Window>
